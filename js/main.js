@@ -5,6 +5,24 @@
 (function () {
   "use strict";
 
+  // ---------------------------------------------------------------------
+  // EmailJS setup — fill these in from your EmailJS dashboard to make the
+  // contact form actually send email (fully client-side, no backend).
+  // Full walkthrough: README.md → "Setting up email sending".
+  // ---------------------------------------------------------------------
+  var EMAILJS_CONFIG = {
+    publicKey: "HaKpRwUvnx7jFY-XB",
+    serviceId: "service_ydpqcel",
+    templateIdEnquiry: "template_6s9ncqh",
+    templateIdSupport: "template_dzuitp2",
+  };
+
+  function isEmailjsConfigured() {
+    return Object.keys(EMAILJS_CONFIG).every(function (key) {
+      return EMAILJS_CONFIG[key] && EMAILJS_CONFIG[key].indexOf("YOUR_") !== 0;
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initHeaderScroll();
     initMobileNav();
@@ -14,9 +32,20 @@
     initFaqAccordion();
     initGalleryLightbox();
     initVideoModal();
+    initInquiryToggle();
     initContactForm();
     initBackToTop();
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    if (isEmailjsConfigured() && window.emailjs) {
+      emailjs.init(EMAILJS_CONFIG.publicKey);
+    } else {
+      console.warn(
+        "[Bhandarizee] Email sending isn't configured yet — the contact " +
+          "form will show an error on submit until EMAILJS_CONFIG in " +
+          "js/main.js is filled in. See README.md → \"Setting up email sending\"."
+      );
+    }
   });
 
   /* ---------- sticky header ---------- */
@@ -227,7 +256,44 @@
     });
   }
 
-  /* ---------- contact form (frontend-only simulated submit) ---------- */
+  /* ---------- inquiry type toggle (corporate enquiry vs support/feedback) ---------- */
+  function initInquiryToggle() {
+    var toggle = document.getElementById("inquiryToggle");
+    var form = document.getElementById("contactForm");
+    var hiddenInput = document.getElementById("inquiryType");
+    var messageField = document.getElementById("message");
+    if (!toggle || !form || !hiddenInput) return;
+
+    var options = toggle.querySelectorAll(".inquiry-option");
+    var placeholders = {
+      enquiry: "Tell us about your event, audience size, and goals...",
+      support: "How can we help you today?",
+    };
+
+    options.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var type = btn.getAttribute("data-type");
+
+        options.forEach(function (b) {
+          var isActive = b === btn;
+          b.classList.toggle("active", isActive);
+          b.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        toggle.setAttribute("data-active", type);
+        form.setAttribute("data-type", type);
+        hiddenInput.value = type;
+        if (messageField) messageField.placeholder = placeholders[type] || "";
+
+        // Clear any leftover validation state on fields that just got hidden.
+        form.querySelectorAll(".corporate-only .form-group.invalid").forEach(function (g) {
+          g.classList.remove("invalid");
+        });
+      });
+    });
+  }
+
+  /* ---------- contact form (sends via EmailJS — see EMAILJS_CONFIG above) ---------- */
   function initContactForm() {
     var form = document.getElementById("contactForm");
     if (!form) return;
@@ -259,22 +325,51 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      form.classList.remove("submitted");
+      form.classList.remove("submitted", "send-error");
 
       if (!validate()) return;
 
-      // Frontend-only demo: simulate a network request, then show the
-      // success message. Replace this block with a real request (e.g.
-      // fetch() to Formspree/EmailJS/your API) to actually send the data.
+      var inquiryType = form.elements.inquiryType.value === "support" ? "support" : "enquiry";
       var submitBtn = form.querySelector(".form-submit .btn-label");
       var originalLabel = submitBtn.textContent;
+
+      if (!isEmailjsConfigured() || !window.emailjs) {
+        form.classList.add("send-error");
+        return;
+      }
+
+      var templateParams = {
+        inquiry_type: inquiryType === "enquiry" ? "Corporate or Training Enquiry" : "Support or Feedback",
+        from_name: form.elements.name.value.trim(),
+        from_email: form.elements.email.value.trim(),
+        phone: form.elements.phone.value.trim() || "Not provided",
+        message: form.elements.message.value.trim(),
+        company: inquiryType === "enquiry" ? (form.elements.company.value.trim() || "Not provided") : "",
+        event_date: inquiryType === "enquiry" ? (form.elements.eventDate.value || "Not specified") : "",
+        event_type: inquiryType === "enquiry" ? form.elements.eventType.value : "",
+        time: new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }),
+      };
+      var templateId = inquiryType === "enquiry"
+        ? EMAILJS_CONFIG.templateIdEnquiry
+        : EMAILJS_CONFIG.templateIdSupport;
+
       submitBtn.textContent = "Sending...";
 
-      setTimeout(function () {
-        submitBtn.textContent = originalLabel;
-        form.classList.add("submitted");
-        form.reset();
-      }, 700);
+      emailjs.send(EMAILJS_CONFIG.serviceId, templateId, templateParams).then(
+        function () {
+          submitBtn.textContent = originalLabel;
+          form.classList.add("submitted");
+          form.reset();
+          // Reset the toggle back to its default state after a successful send.
+          var enquiryOption = form.querySelector('.inquiry-option[data-type="enquiry"]');
+          if (enquiryOption) enquiryOption.click();
+        },
+        function (err) {
+          console.error("[Bhandarizee] EmailJS send failed:", err);
+          submitBtn.textContent = originalLabel;
+          form.classList.add("send-error");
+        }
+      );
     });
   }
 

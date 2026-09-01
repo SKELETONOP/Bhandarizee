@@ -339,6 +339,7 @@ section {
 
 .hero {
   min-height: 100vh;
+  min-height: 100svh; /* avoids the mobile browser URL-bar jump with 100vh */
   display: flex;
   align-items: center;
   position: relative;
@@ -350,9 +351,21 @@ section {
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-image: url("../images/hero-bg.png");
   background-size: cover;
   background-position: center;
   opacity: 1;
+}
+/* Mobile hero image: the desktop photo's subject sits off to the right,
+   which a narrow "cover" crop centers on the crowd instead. Re-aiming the
+   crop helps immediately; for full control, point this at a dedicated
+   mobile photo instead, e.g. url("../images/hero-bg-mobile.png") — just
+   swap the path below, no HTML changes needed. */
+@media (max-width: 640px) {
+  .hero-bg {
+    background-image: url("../images/hero-bg.png");
+    background-position: 75% center;
+  }
 }
 .hero-canvas {
   position: absolute;
@@ -364,14 +377,20 @@ section {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  /* background:
-    linear-gradient(
-      90deg,
-      rgba(13, 13, 13, 0.97) 15%,
-      rgba(13, 13, 13, 0.82) 60%,
-      rgba(13, 13, 13, 0.94) 100%
-    ),
-    linear-gradient(0deg, rgba(13, 13, 13, 0.9), transparent 40%); */
+}
+/* Desktop keeps the photo unobstructed (it already reads well: dark on the
+   left for the text, subject lit on the right). Mobile crops are less
+   predictable once a different photo goes in, so add a protective scrim
+   there only, to keep the headline and buttons legible either way. */
+@media (max-width: 640px) {
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(13, 13, 13, 0.78) 0%,
+      rgba(13, 13, 13, 0.35) 42%,
+      rgba(13, 13, 13, 0.88) 100%
+    );
+  }
 }
 
 .hero-inner {
@@ -1234,6 +1253,70 @@ section {
   display: block;
 }
 
+/* ---------- inquiry type toggle ---------- */
+
+.inquiry-toggle {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--black-soft);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+.inquiry-option {
+  position: relative;
+  z-index: 1;
+  padding: 12px 8px;
+  text-align: center;
+  font-family: var(--ff-heading);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-light-muted);
+  border-radius: 999px;
+  transition: color var(--transition);
+}
+.inquiry-option.active {
+  color: var(--black);
+}
+.inquiry-slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  border-radius: 999px;
+  transition: transform var(--transition);
+}
+.inquiry-toggle[data-active="support"] .inquiry-slider {
+  transform: translateX(100%);
+}
+
+/* ---------- corporate-only fields ---------- */
+
+.corporate-only {
+  display: grid;
+  gap: 20px;
+  overflow: hidden;
+  max-height: 260px;
+  opacity: 1;
+  transition:
+    max-height var(--transition),
+    opacity var(--transition),
+    margin var(--transition);
+  margin-bottom: 20px;
+}
+.contact-form[data-type="support"] .corporate-only {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
 .form-submit {
   width: 100%;
   margin-top: 6px;
@@ -1246,6 +1329,20 @@ section {
   font-size: 0.88rem;
 }
 .contact-form.submitted .form-success {
+  display: block;
+}
+.form-error-banner {
+  display: none;
+  margin-top: 16px;
+  text-align: center;
+  color: #f08b7c;
+  font-size: 0.85rem;
+}
+.form-error-banner a {
+  color: inherit;
+  text-decoration: underline;
+}
+.contact-form.send-error .form-error-banner {
   display: block;
 }
 
@@ -1315,26 +1412,6 @@ section {
 }
 
 /* ===================== FLOATING ACTIONS ===================== */
-
-.whatsapp-fab {
-  position: fixed;
-  bottom: 26px;
-  left: 26px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #25d366;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
-  z-index: 300;
-  transition: transform var(--transition);
-}
-.whatsapp-fab:hover {
-  transform: scale(1.08);
-}
 
 .back-to-top {
   position: fixed;
@@ -1543,5 +1620,39 @@ section {
   }
   .stats-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .contact-form {
+    padding: 22px;
+  }
+  .inquiry-option {
+    font-size: 0.66rem;
+    padding: 11px 4px;
+  }
+  .faq-question {
+    font-size: 0.92rem;
+    padding: 18px 0;
+  }
+  .booking-card,
+  .testimonial-card {
+    padding: 26px 22px;
+  }
+  .video-modal-close {
+    top: -40px;
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: 2.15rem;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 0;
+  }
+  .stat-number,
+  .stat-plus {
+    font-size: 1.6rem;
   }
 }
