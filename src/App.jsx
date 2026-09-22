@@ -1,44 +1,38 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Stats from "./components/Stats";
-import Topics from "./components/Topics";
-import Videos from "./components/Videos";
-import Reels from "./components/Reels";
-import VideoModal from "./components/VideoModal";
-import Gallery from "./components/Gallery";
-import Lightbox from "./components/Lightbox";
-import Journey from "./components/Journey";
-import Testimonials from "./components/Testimonials";
-import FAQ from "./components/FAQ";
-import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
+import Home from "./pages/Home";
+import AllVideos from "./pages/AllVideos";
+
+function ScrollManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [location.pathname, location.hash]);
+
+  return null;
+}
 
 export default function App() {
-  const [playingVideoId, setPlayingVideoId] = useState(null);
-  const [lightboxImage, setLightboxImage] = useState(null);
-
   return (
     <>
       <Header />
+      <ScrollManager />
 
-      <main>
-        <Hero />
-        <About />
-        <Stats />
-        <Topics />
-        <Videos onPlay={setPlayingVideoId} />
-        <Reels onPlay={setPlayingVideoId} />
-        <VideoModal youtubeId={playingVideoId} onClose={() => setPlayingVideoId(null)} />
-        <Gallery onOpen={(src, alt) => setLightboxImage({ src, alt })} />
-        <Lightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
-        <Journey />
-        <Testimonials />
-        <FAQ />
-        <Contact />
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/videos" element={<AllVideos />} />
+      </Routes>
 
       <Footer />
       <BackToTop />

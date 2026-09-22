@@ -1,14 +1,20 @@
+import { Link, useLocation } from "react-router-dom";
+
 export default function Footer() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const sectionHref = (id) => (isHome ? `#${id}` : `/#${id}`);
+
   return (
     <footer className="site-footer">
       <div className="container footer-top">
         <div className="footer-brand">
-          <a href="#home" className="logo">
+          <Link to={sectionHref("home")} className="logo">
             <span className="logo-main">
               BHANDARI<span className="accent">ZEE</span>
             </span>
             <span className="logo-sub">M O T I V A T I O N</span>
-          </a>
+          </Link>
           <p>
             Helping people believe, achieve and transform — one stage at a time.
           </p>
@@ -44,7 +50,12 @@ export default function Footer() {
                 <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
               </svg>
             </a>
-            <a href="#" aria-label="YouTube" target="_blank" rel="noopener">
+            <a
+              href="https://www.youtube.com/@bsbhandariofficial"
+              aria-label="YouTube"
+              target="_blank"
+              rel="noopener"
+            >
               <svg viewBox="0 0 24 24" width="16" height="16">
                 <rect x="2.5" y="6" width="19" height="12" rx="4" fill="none" stroke="currentColor" strokeWidth="1.6" />
                 <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" />
@@ -55,19 +66,20 @@ export default function Footer() {
 
         <div className="footer-links">
           <h4>Quick Links</h4>
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#topics">Topics</a>
-          <a href="#videos">Videos</a>
-          <a href="#reels">Reels</a>
-          <a href="#gallery">Gallery</a>
+          <Link to={sectionHref("home")}>Home</Link>
+          <Link to={sectionHref("about")}>About</Link>
+          <Link to={sectionHref("topics")}>Topics</Link>
+          <Link to={sectionHref("videos")}>Videos</Link>
+          <Link to="/videos">All Videos</Link>
+          <Link to={sectionHref("reels")}>Reels</Link>
+          <Link to={sectionHref("gallery")}>Gallery</Link>
         </div>
 
         <div className="footer-links">
           <h4>More</h4>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">Contact</a>
+          <Link to={sectionHref("testimonials")}>Testimonials</Link>
+          <Link to={sectionHref("faq")}>FAQ</Link>
+          <Link to={sectionHref("contact")}>Contact</Link>
         </div>
 
         <div className="footer-contact">
@@ -78,9 +90,9 @@ export default function Footer() {
           <p>
             <a href="tel:+910000000000">+91 00000 00000</a>
           </p>
-          <a href="#contact" className="btn btn-primary">
+          <Link to={sectionHref("contact")} className="btn btn-primary">
             Book Now
-          </a>
+          </Link>
         </div>
       </div>
 

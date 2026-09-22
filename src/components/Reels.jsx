@@ -1,57 +1,153 @@
 import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
+import { loadYouTubeIframeApi } from "../lib/youtubeIframeApi";
 
 const SPEAKER_AVATAR = "/images/about-photo.png";
 
+// Sourced from https://www.youtube.com/@bsbhandariofficial/shorts — update
+// by swapping the `id` (and thumb, which is keyed to the same id) as new
+// Shorts go up.
 const REELS = [
   {
-    id: "WZxNRd2JVgg",
-    thumb: "/images/gallery-1.png",
-    title: "Believe In Yourself",
-    context: "Corporate Keynote",
+    id: "7QPNMYSa2E0",
+    thumb: "https://i.ytimg.com/vi/7QPNMYSa2E0/oar2.jpg",
+    title: "How To Achieve Success?",
+    context: "Motivational Short",
   },
   {
-    id: "YOUR_REEL_ID_2",
-    thumb: "/images/gallery-2.svg",
-    title: "Turning Failure Into Fuel",
-    context: "College Seminar",
+    id: "kz5WNpn-Atw",
+    thumb: "https://i.ytimg.com/vi/kz5WNpn-Atw/oar2.jpg",
+    title: "Thank You Sanjeev Sir",
+    context: "AWPL Tribute",
   },
   {
-    id: "YOUR_REEL_ID_3",
-    thumb: "/images/gallery-3.svg",
-    title: "Stay Consistent",
-    context: "Leadership Workshop",
+    id: "Nbt3Tyfzwgg",
+    thumb: "https://i.ytimg.com/vi/Nbt3Tyfzwgg/oar2.jpg",
+    title: "Indian Customer Kaisa Hota Hai!",
+    context: "Relatable Fact",
   },
   {
-    id: "YOUR_REEL_ID_4",
-    thumb: "/images/gallery-4.svg",
-    title: "Lead With Purpose",
-    context: "Virtual Session",
+    id: "S279gg6X-Ng",
+    thumb: "https://i.ytimg.com/vi/S279gg6X-Ng/oar2.jpg",
+    title: "Blue Ocean Theory: First Mover Advantage",
+    context: "Business Tip",
   },
   {
-    id: "YOUR_REEL_ID_5",
-    thumb: "/images/gallery-5.svg",
-    title: "Own Your Story",
-    context: "Corporate Keynote",
+    id: "lMzvaFPq2xw",
+    thumb: "https://i.ytimg.com/vi/lMzvaFPq2xw/oar2.jpg",
+    title: "You Want Happiness — What About Your Family?",
+    context: "Life Lesson",
   },
   {
-    id: "YOUR_REEL_ID_6",
-    thumb: "/images/gallery-6.svg",
-    title: "Rise Every Day",
-    context: "Conference Talk",
+    id: "cv5_qtXgIsY",
+    thumb: "https://i.ytimg.com/vi/cv5_qtXgIsY/oar2.jpg",
+    title: "2 Days That Are Very Important In Life",
+    context: "Motivational Story",
   },
   {
-    id: "YOUR_REEL_ID_7",
-    thumb: "/images/gallery-1.png",
-    title: "Dream Big, Start Now",
-    context: "College Seminar",
+    id: "6lR3IwCICVA",
+    thumb: "https://i.ytimg.com/vi/6lR3IwCICVA/oar2.jpg",
+    title: "I'll Believe Money Is Worthless When Ambani Says It",
+    context: "Money Mindset",
   },
 ];
 
-export default function Reels({ onPlay }) {
+// Renders the actual looping, initially-muted YouTube player for a reel
+// that's currently playing, plus the mute/unmute toggle for it.
+function ReelPlayer({ videoId }) {
+  const containerRef = useRef(null);
+  const playerRef = useRef(null);
+  const [muted, setMuted] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    loadYouTubeIframeApi().then((YT) => {
+      if (cancelled || !containerRef.current) return;
+      playerRef.current = new YT.Player(containerRef.current, {
+        videoId,
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: videoId,
+          controls: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          rel: 0,
+        },
+        events: {
+          onReady: (e) => {
+            e.target.mute();
+            setMuted(true);
+          },
+        },
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      playerRef.current?.destroy?.();
+      playerRef.current = null;
+    };
+  }, [videoId]);
+
+  function toggleMute() {
+    const player = playerRef.current;
+    if (!player) return;
+    if (muted) {
+      player.unMute();
+      setMuted(false);
+    } else {
+      player.mute();
+      setMuted(true);
+    }
+  }
+
+  return (
+    <>
+      <div className="reel-player-wrap">
+        <div ref={containerRef} />
+      </div>
+      <button
+        type="button"
+        className="reel-mute-btn"
+        aria-label={muted ? "Unmute video" : "Mute video"}
+        onClick={toggleMute}
+      >
+        {muted ? (
+          <svg viewBox="0 0 24 24" width="15" height="15">
+            <path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor" />
+            <path
+              d="M16 9l5 6M21 9l-5 6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="15" height="15">
+            <path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor" />
+            <path
+              d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
+      </button>
+    </>
+  );
+}
+
+export default function Reels() {
   const trackRef = useRef(null);
   const cardRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [playingId, setPlayingId] = useState(null);
 
   function scrollByCards(direction) {
     const track = trackRef.current;
@@ -115,11 +211,11 @@ export default function Reels({ onPlay }) {
       <div className="container">
         <Reveal className="section-head center">
           <p className="eyebrow center light">
-            <span className="eyebrow-line"></span> Testimonials
+            <span className="eyebrow-line"></span> Motivational Shorts
             <span className="eyebrow-line"></span>
           </p>
           <h2 className="section-title center light">
-            Video <span className="accent">Testimonials</span>
+            Short Video <span className="accent">Motivation</span>
           </h2>
           <p className="section-sub light">
             Tap to watch real reactions from stages, workshops and sessions.
@@ -146,40 +242,54 @@ export default function Reels({ onPlay }) {
           </button>
 
           <div className="reels-track" id="reelsTrack" ref={trackRef}>
-            {REELS.map((reel, i) => (
-              <Reveal
-                className="reel-card"
-                delay={i ? `${Math.min(i * 0.05, 0.3)}s` : undefined}
-                key={reel.id + reel.title}
-              >
-                <button
-                  type="button"
-                  className="reel-card-media"
-                  ref={(el) => (cardRefs.current[i] = el)}
-                  onClick={() => onPlay(reel.id)}
-                  aria-label={`Play reel: ${reel.title}`}
+            {REELS.map((reel, i) => {
+              const isPlaying = playingId === reel.id;
+              return (
+                <Reveal
+                  className="reel-card"
+                  delay={i ? `${Math.min(i * 0.05, 0.3)}s` : undefined}
+                  key={reel.id + reel.title}
                 >
-                  <img src={reel.thumb} alt={reel.title} loading="lazy" />
-                  <span className="reel-badge">
-                    {i + 1}/{REELS.length}
-                  </span>
-                  <span className="reel-info">
-                    <span className="reel-avatar">
-                      <img src={SPEAKER_AVATAR} alt="" />
+                  <div
+                    className="reel-card-media"
+                    ref={(el) => (cardRefs.current[i] = el)}
+                  >
+                    {isPlaying ? (
+                      <ReelPlayer videoId={reel.id} />
+                    ) : (
+                      <button
+                        type="button"
+                        className="reel-play-trigger"
+                        onClick={() => setPlayingId(reel.id)}
+                        aria-label={`Play reel: ${reel.title}`}
+                      >
+                        <img src={reel.thumb} alt={reel.title} loading="lazy" />
+                      </button>
+                    )}
+
+                    <span className="reel-badge">
+                      {i + 1}/{REELS.length}
                     </span>
-                    <span className="reel-meta">
-                      <strong>{reel.title}</strong>
-                      <span>{reel.context}</span>
+                    <span className="reel-info">
+                      <span className="reel-avatar">
+                        <img src={SPEAKER_AVATAR} alt="" />
+                      </span>
+                      <span className="reel-meta">
+                        <strong>{reel.title}</strong>
+                        <span>{reel.context}</span>
+                      </span>
+                      {!isPlaying && (
+                        <span className="reel-play" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" width="13" height="13">
+                            <path d="M8 5v14l11-7z" fill="currentColor" />
+                          </svg>
+                        </span>
+                      )}
                     </span>
-                    <span className="reel-play" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="13" height="13">
-                        <path d="M8 5v14l11-7z" fill="currentColor" />
-                      </svg>
-                    </span>
-                  </span>
-                </button>
-              </Reveal>
-            ))}
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
 
           <button

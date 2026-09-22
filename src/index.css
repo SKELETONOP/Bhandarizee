@@ -702,32 +702,24 @@ section {
 }
 .video-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  grid-template-rows: repeat(3, auto);
-  gap: 22px;
-}
-.video-card.featured {
-  grid-column: 1;
-  grid-row: 1 / span 3;
-  display: flex;
-  flex-direction: column;
-}
-.video-card.featured .video-thumb {
-  flex: 1;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 20px;
 }
 .video-card h3 {
   font-family: var(--ff-heading);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
   color: var(--white);
   margin-top: 14px;
-}
-.video-card.featured h3 {
-  font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .video-card p {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-light-muted);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .video-thumb {
@@ -735,9 +727,6 @@ section {
   border-radius: var(--radius-sm);
   overflow: hidden;
   aspect-ratio: 16/10;
-}
-.video-card.featured .video-thumb {
-  aspect-ratio: 16/11;
 }
 .video-thumb img {
   width: 100%;
@@ -764,8 +753,8 @@ section {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   color: var(--black);
@@ -781,8 +770,22 @@ section {
 }
 
 .videos-cta {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
   margin-top: 48px;
+}
+
+/* ===================== ALL VIDEOS PAGE ===================== */
+
+.videos-page {
+  padding: 160px 0 110px;
+  background: var(--black-soft);
+  min-height: 100vh;
+}
+.videos-page .section-head {
+  margin-bottom: 50px;
 }
 
 /* video modal */
@@ -908,14 +911,34 @@ section {
 .reel-card-media:hover {
   border-color: rgba(224, 166, 56, 0.45);
 }
-.reel-card-media img {
+.reel-play-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+.reel-play-trigger img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform var(--transition);
 }
-.reel-card-media:hover img {
+.reel-card-media:hover .reel-play-trigger img {
   transform: scale(1.06);
+}
+.reel-player-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.reel-player-wrap iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
 }
 .reel-card-media::before {
   content: "";
@@ -923,11 +946,12 @@ section {
   inset: 0;
   z-index: 1;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0) 48%);
+  pointer-events: none;
 }
 .reel-badge {
   position: absolute;
   top: 12px;
-  right: 12px;
+  left: 12px;
   z-index: 2;
   background: rgba(13, 13, 13, 0.65);
   backdrop-filter: blur(4px);
@@ -938,6 +962,27 @@ section {
   letter-spacing: 0.3px;
   padding: 4px 9px;
   border-radius: 999px;
+}
+.reel-mute-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(13, 13, 13, 0.65);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), color var(--transition);
+}
+.reel-mute-btn:hover {
+  background: var(--gold);
+  color: var(--black);
 }
 .reel-info {
   position: absolute;
@@ -1705,10 +1750,6 @@ section {
   .video-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .video-card.featured {
-    grid-column: span 2;
-    grid-row: span 1;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1810,6 +1851,9 @@ section {
   .hero {
     padding-top: 96px;
   }
+  .videos-page {
+    padding: 130px 0 76px;
+  }
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
@@ -1826,9 +1870,6 @@ section {
   }
   .video-grid {
     grid-template-columns: 1fr;
-  }
-  .video-card.featured {
-    grid-column: span 1;
   }
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1885,9 +1926,15 @@ section {
   }
   .reel-badge {
     top: 8px;
-    right: 8px;
+    left: 8px;
     font-size: 0.6rem;
     padding: 3px 7px;
+  }
+  .reel-mute-btn {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
   }
   .reel-info {
     padding: 6px 7px;

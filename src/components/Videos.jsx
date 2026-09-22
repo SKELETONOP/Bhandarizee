@@ -1,49 +1,12 @@
+import { Link } from "react-router-dom";
 import Reveal from "./Reveal";
+import { VIDEOS, videoThumb } from "../data/videos";
 
-const VIDEOS = [
-  {
-    id: "WZxNRd2JVgg",
-    thumb: "/images/gallery-1.png",
-    alt: "How to Build an Unbreakable Mindset — video thumbnail",
-    ariaLabel: "Play video: How to Build an Unbreakable Mindset",
-    title: "How to Build an Unbreakable Mindset",
-    meta: "Keynote highlights · 12:40",
-    featured: true,
-    playSize: 26,
-  },
-  {
-    id: "YOUR_VIDEO_ID_2",
-    thumb: "/images/gallery-2.svg",
-    alt: "Turning Failure Into Fuel — video thumbnail",
-    ariaLabel: "Play video: Turning Failure Into Fuel",
-    title: "Turning Failure Into Fuel",
-    meta: "Talk excerpt · 8:15",
-    delay: "0.1s",
-    playSize: 22,
-  },
-  {
-    id: "YOUR_VIDEO_ID_3",
-    thumb: "/images/gallery-3.svg",
-    alt: "The Power of Purpose-Driven Leadership — video thumbnail",
-    ariaLabel: "Play video: The Power of Purpose-Driven Leadership",
-    title: "Purpose-Driven Leadership",
-    meta: "Corporate session · 15:02",
-    delay: "0.2s",
-    playSize: 22,
-  },
-  {
-    id: "YOUR_VIDEO_ID_4",
-    thumb: "/images/gallery-4.svg",
-    alt: "Live Keynote: Rise After You Fall — video thumbnail",
-    ariaLabel: "Play video: Live Keynote, Rise After You Fall",
-    title: "Live Keynote: Rise After You Fall",
-    meta: "Full session · 42:18",
-    delay: "0.3s",
-    playSize: 22,
-  },
-];
+const PREVIEW_COUNT = 8;
 
 export default function Videos({ onPlay }) {
+  const preview = VIDEOS.slice(0, PREVIEW_COUNT);
+
   return (
     <section className="videos" id="videos">
       <div className="container">
@@ -62,33 +25,42 @@ export default function Videos({ onPlay }) {
         </Reveal>
 
         <div className="video-grid">
-          {VIDEOS.map((video) => (
+          {preview.map((video, i) => (
             <Reveal
-              className={`video-card${video.featured ? " featured" : ""}`}
-              delay={video.delay}
-              key={video.id + video.title}
+              className="video-card"
+              delay={i ? `${Math.min(i * 0.05, 0.3)}s` : undefined}
+              key={video.id}
             >
               <div className="video-thumb">
-                <img src={video.thumb} alt={video.alt} loading="lazy" />
+                <img
+                  src={videoThumb(video.id)}
+                  alt={`${video.title} — video thumbnail`}
+                  loading="lazy"
+                />
                 <button
                   className="play-btn"
-                  aria-label={video.ariaLabel}
+                  aria-label={`Play video: ${video.title}`}
                   onClick={() => onPlay(video.id)}
                 >
-                  <svg viewBox="0 0 24 24" width={video.playSize} height={video.playSize}>
+                  <svg viewBox="0 0 24 24" width="22" height="22">
                     <path d="M8 5v14l11-7z" fill="currentColor" />
                   </svg>
                 </button>
               </div>
               <h3>{video.title}</h3>
-              <p>{video.meta}</p>
+              <p>
+                {video.views} · {video.duration}
+              </p>
             </Reveal>
           ))}
         </div>
 
         <Reveal className="videos-cta">
+          <Link to="/videos" className="btn btn-primary">
+            View All Videos
+          </Link>
           <a
-            href="https://youtube.com"
+            href="https://www.youtube.com/@bsbhandariofficial"
             target="_blank"
             rel="noopener"
             className="btn btn-outline light"

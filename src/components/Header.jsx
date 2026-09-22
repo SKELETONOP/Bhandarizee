@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-const NAV_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#topics", label: "Topics" },
-  { href: "#videos", label: "Videos" },
-  { href: "#reels", label: "Reels" },
-  { href: "#gallery", label: "Gallery" },
-  { href: "#testimonials", label: "Testimonials" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+const NAV_SECTIONS = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "topics", label: "Topics" },
+  { id: "videos", label: "Videos" },
+  { id: "reels", label: "Reels" },
+  { id: "gallery", label: "Gallery" },
+  { id: "testimonials", label: "Testimonials" },
+  { id: "faq", label: "FAQ" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function Header() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   const [scrolled, setScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  const [activeHref, setActiveHref] = useState("#home");
+  const [activeId, setActiveId] = useState("home");
 
   useEffect(() => {
     function update() {
@@ -27,16 +31,15 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const sections = NAV_LINKS.map((link) =>
-      document.querySelector(link.href)
-    ).filter(Boolean);
+    if (!isHome) return;
+    const sections = NAV_SECTIONS.map((s) => document.getElementById(s.id)).filter(Boolean);
     if (!sections.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveHref("#" + entry.target.id);
+            setActiveId(entry.target.id);
           }
         });
       },
@@ -44,7 +47,7 @@ export default function Header() {
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-  }, []);
+  }, [isHome, location.pathname]);
 
   useEffect(() => {
     document.body.style.overflow = navOpen ? "hidden" : "";
@@ -58,6 +61,10 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  function sectionHref(id) {
+    return isHome ? `#${id}` : `/#${id}`;
+  }
+
   return (
     <>
       <header
@@ -65,34 +72,34 @@ export default function Header() {
         id="siteHeader"
       >
         <div className="container header-inner">
-          <a href="#home" className="logo">
+          <Link to={sectionHref("home")} className="logo">
             <span className="logo-main">
               BHANDARI<span className="accent">ZEE</span>
             </span>
             <span className="logo-sub">M O T I V A T I O N</span>
-          </a>
+          </Link>
 
           <nav className={`main-nav${navOpen ? " open" : ""}`} id="mainNav">
             <ul>
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
+              {NAV_SECTIONS.map((s) => (
+                <li key={s.id}>
+                  <Link
+                    to={sectionHref(s.id)}
                     className={`nav-link${
-                      activeHref === link.href ? " active" : ""
+                      isHome && activeId === s.id ? " active" : ""
                     }`}
                     onClick={() => setNavOpen(false)}
                   >
-                    {link.label}
-                  </a>
+                    {s.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <a href="#contact" className="btn btn-primary header-cta">
+          <Link to={sectionHref("contact")} className="btn btn-primary header-cta">
             Book Now
-          </a>
+          </Link>
 
           <button
             className="nav-toggle"

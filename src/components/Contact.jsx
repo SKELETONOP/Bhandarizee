@@ -229,7 +229,12 @@ export default function Contact() {
                   <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
                 </svg>
               </a>
-              <a href="#" aria-label="YouTube" target="_blank" rel="noopener">
+              <a
+                href="https://www.youtube.com/@bsbhandariofficial"
+                aria-label="YouTube"
+                target="_blank"
+                rel="noopener"
+              >
                 <svg viewBox="0 0 24 24" width="18" height="18">
                   <rect x="2.5" y="6" width="19" height="12" rx="4" fill="none" stroke="currentColor" strokeWidth="1.6" />
                   <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" />
