@@ -71,19 +71,26 @@ video — replace each with the real YouTube video ID (the part after
 `watch?v=`). Also update the "Subscribe on YouTube" link's `href` in the same
 file, and the social links in `Contact.jsx` / `Footer.jsx`.
 
-## Reels section
+## Reels section ("Video Testimonials")
 
 `src/components/Reels.jsx` renders a horizontally-scrollable strip of 5–7
-vertical (9:16) reel cards — swipe on mobile, or use the arrow buttons on
-desktop (hidden below 900px in favor of touch swipe). Clicking a card's play
-button opens the same shared `VideoModal` used by the Videos section.
+vertical (9:16) reel cards, styled like a shoppable-reel carousel: each card
+has a position badge (`2/7`), and a bottom overlay bar with the speaker's
+avatar, a caption + context line, and a play button. Pagination dots below
+the strip track scroll position and are clickable; arrow buttons scroll by
+one card on desktop (hidden below 900px in favor of native touch swipe on
+mobile). Tapping anywhere on a card opens the same shared `VideoModal` used
+by the Videos section.
 
 The `REELS` array at the top of the file holds the content — each entry has
 an `id` (YouTube video ID, same format as `Videos.jsx`), a `thumb` (image
-path), and a `title` (caption shown under the card). Add, remove or reorder
-entries freely — the layout and scroll-snap behavior adapt automatically; 5–7
-is a good range to keep the strip feeling full without being a chore to
-swipe through.
+path), a `title` (bold caption in the overlay bar) and a `context` (the
+smaller line under it, e.g. "Corporate Keynote"). The avatar is set once via
+`SPEAKER_AVATAR` near the top of the file (defaults to the About section
+photo) rather than per-reel, since every clip is the same speaker. Add,
+remove or reorder entries freely — the badge count, dots and scroll-snap
+layout all adapt automatically; 5–7 is a good range to keep the strip
+feeling full without being a chore to swipe through.
 
 ## Contact form
 
