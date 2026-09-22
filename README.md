@@ -1,75 +1,110 @@
 # Bhandarizee Motivation — Website
 
-A static, mobile-friendly frontend for B. S. Bhandari's motivational-speaker portfolio site.
-Plain HTML/CSS/JS — no build step, no dependencies to install. Just open `index.html` in a
-browser, or deploy the folder as-is to any static host.
+A React + Vite frontend for B. S. Bhandari's motivational-speaker portfolio site.
+Same look, content and behavior as the original static build — just organized as
+components instead of one big HTML file.
+
+## Getting started
+
+```
+npm install
+npm run dev       # local dev server with hot reload
+npm run build     # production build to dist/
+npm run preview   # preview the production build locally
+```
 
 ## Structure
 
 ```
-index.html        All page content and sections
-css/style.css      All styling (responsive breakpoints at 1100px / 900px / 640px / 380px)
-js/main.js         Nav, scroll reveal, counters, FAQ, gallery lightbox, video modal, contact form
-js/three-bg.js      Three.js particle animation behind the hero section
-images/            Placeholder images — replace with real photos (see below)
+index.html               Page shell (fonts, meta tags) + Vite entry point
+src/main.jsx              React entry point
+src/index.css              All styling (responsive breakpoints at 1100px / 900px / 640px / 380px)
+src/App.jsx                 Assembles all sections, holds shared modal/lightbox state
+src/components/           One component per page section:
+  Header.jsx                 Sticky nav, mobile menu, scroll-spy active link
+  Hero.jsx / HeroParticles.jsx  Hero section + three.js particle background
+  About.jsx                About section + feature grid
+  Stats.jsx                 Animated stat counters
+  Topics.jsx                Topics grid
+  Videos.jsx / VideoModal.jsx  Video grid + YouTube modal player
+  Reels.jsx                  Horizontally scrollable reel strip (shares VideoModal)
+  Gallery.jsx / Lightbox.jsx  Gallery grid + image lightbox
+  Journey.jsx                Timeline
+  Testimonials.jsx          Testimonials + booking card
+  FAQ.jsx                    FAQ accordion
+  Contact.jsx                Contact form (EmailJS) + inquiry type toggle
+  Footer.jsx
+  BackToTop.jsx
+  Reveal.jsx                 Shared scroll-reveal wrapper (used across sections)
+public/images/             Images, served as-is at /images/...
 ```
 
 ## Replacing images
 
-Every placeholder lives in `images/` and is labeled with its purpose and recommended size.
-Keep the same filename and the site keeps working — just overwrite the file (jpg/png/webp
-all work fine, you don't have to keep them as `.svg`; if you use a different extension,
-update the matching `src=`/CSS path).
+Every image lives in `public/images/` and is labeled with its purpose in the
+components that reference it. Keep the same filename and the site keeps
+working — just overwrite the file (jpg/png/webp all work fine; if you use a
+different extension, update the matching `src=` in the component that uses
+it).
 
-| File | Used for | Recommended size |
-|---|---|---|
-| `hero-bg.png` | Full-bleed hero background (Bhandari on stage) | 1600×1000+ |
-| `about-photo.svg` | About section portrait | 800×900 |
-| `gallery-1.svg` … `gallery-6.svg` | Gallery grid (event photos) | 800×800 (square) |
-| `testimonial-1.svg` … `testimonial-3.svg` | Client avatars in testimonials | 200×200 |
-| `favicon.svg` | Browser tab icon | any, square |
-| `og-image.svg` | Not linked yet — optional social-share image, 1200×630 |
+| File | Used for | Recommended size | Referenced in |
+|---|---|---|---|
+| `hero-bg.png` | Full-bleed hero background (Bhandari on stage) | 1600×1000+ | `src/index.css` (`.hero-bg`) |
+| `about-photo.png` | About section portrait | 800×900 | `src/components/About.jsx` |
+| `gallery-1.png` … `gallery-6.svg` | Gallery grid (event photos) | 800×800 (square) | `src/components/Gallery.jsx`, `src/components/Videos.jsx` |
+| `testimonial-1.svg` … `testimonial-3.svg` | Client avatars in testimonials | 200×200 | `src/components/Testimonials.jsx` |
+| `favicon.svg` | Browser tab icon | any, square | `index.html` |
 
 ### A different hero photo for mobile
 
-The hero photo is set in `css/style.css` under `.hero-bg`, not in the HTML. There are two
-rules: the base one (desktop) and a `@media (max-width: 640px)` override (mobile). Right now
-mobile reuses `hero-bg.png` with a repositioned crop (`background-position: 75% center`)
-because the desktop photo's subject sits off to the right, and a narrow "cover" crop was
-centering on the crowd instead.
-
-To use a **different photo on mobile** (e.g. a tighter vertical crop of the same shot, or a
-different photo entirely):
-
-1. Add the new file to `images/`, e.g. `hero-bg-mobile.png`.
-2. In `css/style.css`, find the `@media (max-width: 640px) { .hero-bg { ... } }` block and
-   change `background-image: url("../images/hero-bg.png")` to point at the new file.
-
-No HTML changes needed either way.
+The hero photo is set in `src/index.css` under `.hero-bg`, not in JSX. There
+are two rules: the base one (desktop) and a `@media (max-width: 640px)`
+override (mobile). Right now mobile reuses `hero-bg.png` with a repositioned
+crop (`background-position: 75% center`). To use a different photo on mobile,
+add the file to `public/images/` and point the media-query rule's
+`background-image` at it — no component changes needed.
 
 ## Adding real videos
 
-In the **Videos** section of `index.html`, each `.video-card` has a
-`data-youtube-id="YOUR_VIDEO_ID_..."` attribute — replace it with the real YouTube video ID
-(the part after `watch?v=`). Also update the "Subscribe on YouTube" link's `href` near the
-end of that section, and the social links in Contact/Footer.
+In `src/components/Videos.jsx`, the `VIDEOS` array has an `id` field per
+video — replace each with the real YouTube video ID (the part after
+`watch?v=`). Also update the "Subscribe on YouTube" link's `href` in the same
+file, and the social links in `Contact.jsx` / `Footer.jsx`.
+
+## Reels section
+
+`src/components/Reels.jsx` renders a horizontally-scrollable strip of 5–7
+vertical (9:16) reel cards — swipe on mobile, or use the arrow buttons on
+desktop (hidden below 900px in favor of touch swipe). Clicking a card's play
+button opens the same shared `VideoModal` used by the Videos section.
+
+The `REELS` array at the top of the file holds the content — each entry has
+an `id` (YouTube video ID, same format as `Videos.jsx`), a `thumb` (image
+path), and a `title` (caption shown under the card). Add, remove or reorder
+entries freely — the layout and scroll-snap behavior adapt automatically; 5–7
+is a good range to keep the strip feeling full without being a chore to
+swipe through.
 
 ## Contact form
 
-The form has a slider at the top so a visitor picks what they're sending: a **Corporate /
-Training Enquiry** (shows extra fields — company, event date, event type) or general
-**Support / Feedback** (just name, email, phone, message). Both routes land in your inbox,
-just tagged and templated differently so you can tell them apart at a glance.
+The form has a slider at the top so a visitor picks what they're sending: a
+**Corporate / Training Enquiry** (shows extra fields — company, event date,
+event type) or general **Support / Feedback** (just name, email, phone,
+message). Both routes land in your inbox, just tagged and templated
+differently so you can tell them apart at a glance.
 
-It sends through **EmailJS** — a service that relays the message from the visitor's browser
-straight to a real inbox, with no backend server or code of your own to run.
+It sends through **EmailJS** — a service that relays the message from the
+visitor's browser straight to a real inbox, with no backend server or code of
+your own to run.
 
-**This is already set up and working** — `EMAILJS_CONFIG` in `js/main.js` has the real
-Service ID, both Template IDs, and Public Key filled in, and both message types have been
-verified end-to-end. The two email templates (branded to match the site) live directly in the
+**This is already set up and working** — `EMAILJS_CONFIG` in
+`src/components/Contact.jsx` has the real Service ID, both Template IDs, and
+Public Key filled in, and both message types have been verified end-to-end.
+The two email templates (branded to match the site) live directly in the
 EmailJS dashboard under Email Templates.
 
-If you ever need to recreate a template from scratch, or add a third one, here's the shape:
+If you ever need to recreate a template from scratch, or add a third one,
+here's the shape:
 
 - Variables sent by the form (used in both templates): `{{from_name}}`, `{{from_email}}`,
   `{{phone}}`, `{{message}}`, `{{inquiry_type}}`, `{{time}}`
@@ -83,28 +118,28 @@ If you ever need to recreate a template from scratch, or add a third one, here's
   Training Enquiry" / "Support or Feedback") — EmailJS HTML-escapes template variables even in
   the plain-text Subject line, which turned `/` into `&#x2F;` when it was tried.
 
-**To point submissions at a different inbox**, change "To Email" on each template in the
-EmailJS dashboard — no code change needed. The two templates can each go to a different address
-if useful (e.g. enquiries to a sales inbox, support to a different one).
+**To point submissions at a different inbox**, change "To Email" on each
+template in the EmailJS dashboard — no code change needed. The two templates
+can each go to a different address if useful (e.g. enquiries to a sales
+inbox, support to a different one).
 
-That's the whole setup — no server, no API keys exposed beyond the public key (which is
-designed to be used client-side). Never put an EmailJS **private key** into this codebase —
-it's a secret for optional server-side "strict mode" validation and doesn't belong in
-publicly-servable frontend code.
-
-**Alternative:** if you'd rather not use EmailJS, [Formspree](https://formspree.io) works too
-(set the form's `action` to your Formspree endpoint and let it submit normally instead of the
-EmailJS call in `initContactForm()`), though its free tier only supports one destination/form,
-so the two-template routing above would need two separate Formspree forms.
+**Alternative:** if you'd rather not use EmailJS, [Formspree](https://formspree.io)
+works too (set the form's `action` to your Formspree endpoint and let it
+submit normally instead of the `emailjs.send()` call in
+`src/components/Contact.jsx`), though its free tier only supports one
+destination/form, so the two-template routing above would need two separate
+Formspree forms.
 
 ## Editable details
 
-Search `index.html` for these and update with the real details:
-- Email: `hello@bhandarizee.com`
-- Phone: `+91 00000 00000`
-- Social links (currently `href="#"` placeholders) in Contact and Footer
+Search the codebase for these and update with the real details:
+- Email: `hello@bhandarizee.com` (in `Contact.jsx` and `Footer.jsx`)
+- Phone: `+91 00000 00000` (in `Contact.jsx` and `Footer.jsx`)
+- Social links (currently `href="#"` placeholders) in `Contact.jsx` and `Footer.jsx`
 
 ## Deploying
 
-No build step required — upload the whole folder to any static host (Netlify, Vercel,
-GitHub Pages, cPanel, etc.) and it works as-is.
+`npm run build` produces a static `dist/` folder — upload it to any static
+host (Netlify, Vercel, GitHub Pages, cPanel, etc.). Most hosts (Netlify,
+Vercel) will run the build for you directly from this repo: build command
+`npm run build`, publish directory `dist`.

@@ -351,7 +351,7 @@ section {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url("../images/hero-bg.png");
+  background-image: url("/images/hero-bg.png");
   background-size: cover;
   background-position: center;
   opacity: 1;
@@ -359,11 +359,11 @@ section {
 /* Mobile hero image: the desktop photo's subject sits off to the right,
    which a narrow "cover" crop centers on the crowd instead. Re-aiming the
    crop helps immediately; for full control, point this at a dedicated
-   mobile photo instead, e.g. url("../images/hero-bg-mobile.png") — just
+   mobile photo instead, e.g. url("/images/hero-bg-mobile.png") — just
    swap the path below, no HTML changes needed. */
 @media (max-width: 640px) {
   .hero-bg {
-    background-image: url("../images/hero-bg.png");
+    background-image: url("/images/hero-bg.png");
     background-position: 75% center;
   }
 }
@@ -829,6 +829,97 @@ section {
   color: var(--white);
   font-size: 2rem;
   line-height: 1;
+}
+
+/* ===================== REELS ===================== */
+
+.reels {
+  padding: 110px 0;
+  background: var(--black);
+  overflow: hidden;
+}
+.reels .section-head {
+  margin-bottom: 44px;
+}
+.reels-scroller {
+  position: relative;
+}
+.reels-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px max(24px, calc((100vw - var(--container)) / 2)) 20px;
+  scrollbar-width: none;
+}
+.reels-track::-webkit-scrollbar {
+  display: none;
+}
+.reel-card {
+  flex: 0 0 auto;
+  width: 220px;
+  scroll-snap-align: start;
+}
+.reel-thumb {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 9/16;
+  background: var(--dark-2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.reel-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+.reel-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 45%);
+}
+.reel-card:hover .reel-thumb img {
+  transform: scale(1.06);
+}
+.reel-thumb .play-btn {
+  width: 48px;
+  height: 48px;
+}
+.reel-title {
+  margin-top: 12px;
+  font-family: var(--ff-heading);
+  font-size: 0.9rem;
+  color: var(--white);
+  text-align: center;
+}
+.reels-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: background var(--transition), color var(--transition);
+}
+.reels-nav:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+.reels-nav-prev {
+  left: 18px;
+}
+.reels-nav-next {
+  right: 18px;
 }
 
 /* ===================== GALLERY ===================== */
@@ -1560,6 +1651,10 @@ section {
   .footer-top {
     grid-template-columns: 1fr 1fr;
   }
+
+  .reels-nav {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1569,6 +1664,7 @@ section {
   .about,
   .topics,
   .videos,
+  .reels,
   .gallery,
   .journey,
   .testimonials,
@@ -1641,6 +1737,22 @@ section {
     top: -40px;
     font-size: 1.7rem;
   }
+
+  .reels-track {
+    gap: 12px;
+    padding: 4px 18px 16px;
+  }
+  .reel-card {
+    width: 150px;
+  }
+  .reel-thumb .play-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .reel-title {
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
 }
 
 @media (max-width: 380px) {
@@ -1654,5 +1766,9 @@ section {
   .stat-number,
   .stat-plus {
     font-size: 1.6rem;
+  }
+
+  .reel-card {
+    width: 130px;
   }
 }
