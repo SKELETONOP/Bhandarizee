@@ -137,9 +137,23 @@ Search the codebase for these and update with the real details:
 - Phone: `+91 00000 00000` (in `Contact.jsx` and `Footer.jsx`)
 - Social links (currently `href="#"` placeholders) in `Contact.jsx` and `Footer.jsx`
 
-## Deploying
+## Deploying (Netlify)
 
-`npm run build` produces a static `dist/` folder — upload it to any static
-host (Netlify, Vercel, GitHub Pages, cPanel, etc.). Most hosts (Netlify,
-Vercel) will run the build for you directly from this repo: build command
-`npm run build`, publish directory `dist`.
+`netlify.toml` at the repo root already has everything Netlify needs — point
+a new Netlify site at this repo and it just works, no manual config required:
+
+- Build command `npm run build`, publish directory `dist` (Netlify will pick
+  these up from `netlify.toml` automatically, but they're also there if you
+  ever set up the site by hand).
+- `NODE_VERSION = "22"`, matching the `engines` field in `package.json` and
+  what Vite 8 requires (Node ^20.19 or >=22.12). There's also an `.nvmrc` for
+  anyone building locally with `nvm`.
+- A catch-all redirect to `index.html` (this site only navigates with
+  in-page `#anchors`, so it's a safety net for a stray deep link, not a
+  routing requirement).
+- Long-lived cache headers for the hashed files under `/assets/` — Vite
+  renames those on every content change, so caching them for a year is safe.
+
+The EmailJS keys in `src/components/Contact.jsx` are the public, client-side
+kind (see "Contact form" above) — no Netlify environment variables needed for
+the form to work.
