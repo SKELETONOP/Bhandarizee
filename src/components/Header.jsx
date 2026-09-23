@@ -61,7 +61,10 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  const PAGE_LINKS = { videos: "/videos", gallery: "/gallery" };
+
   function sectionHref(id) {
+    if (PAGE_LINKS[id]) return PAGE_LINKS[id];
     return isHome ? `#${id}` : `/#${id}`;
   }
 

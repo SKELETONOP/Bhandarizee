@@ -1,9 +1,14 @@
+import { useState } from "react";
 import Reveal from "./Reveal";
+import TopicModal from "./TopicModal";
 
 const TOPICS = [
   {
     title: "Overcoming Adversity",
     desc: "Turning setbacks into stepping stones for growth.",
+    quoteSanskrit: "उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः।",
+    quoteHindi: "उद्यम करने से ही कार्य सिद्ध होते हैं, केवल इच्छा करने से नहीं।",
+    quoteEnglish: "Great works are accomplished through effort, not mere wishing.",
     icon: (
       <svg viewBox="0 0 24 24">
         <path
@@ -20,6 +25,9 @@ const TOPICS = [
     title: "Unlocking Your Potential",
     desc: "Discover your strengths and learn to maximize them.",
     delay: "0.05s",
+    quoteSanskrit: "उत्तिष्ठत जाग्रत प्राप्य वरान्निबोधत।",
+    quoteHindi: "उठो, जागो और लक्ष्य की प्राप्ति तक रुको मत।",
+    quoteEnglish: "Arise, awake, and stop not till the goal is reached.",
     icon: (
       <svg viewBox="0 0 24 24">
         <path
@@ -43,6 +51,9 @@ const TOPICS = [
     title: "Mindset & Motivation",
     desc: "Build a resilient mindset that drives lasting success.",
     delay: "0.1s",
+    quoteSanskrit: "मन एव मनुष्याणां कारणं बन्धमोक्षयोः।",
+    quoteHindi: "मन ही मनुष्य के बंधन और मुक्ति, दोनों का कारण है।",
+    quoteEnglish: "The mind alone is the cause of both bondage and freedom.",
     icon: (
       <svg viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -60,6 +71,9 @@ const TOPICS = [
     title: "Goal Setting & Achievement",
     desc: "Set goals that truly inspire and follow through on them.",
     delay: "0.15s",
+    quoteSanskrit: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।",
+    quoteHindi: "तुम्हारा अधिकार केवल कर्म करने में है, फल की चिंता कभी मत करो।",
+    quoteEnglish: "Your right is to action alone, never to its fruits.",
     icon: (
       <svg viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -72,6 +86,9 @@ const TOPICS = [
     title: "Leadership & Influence",
     desc: "Lead with purpose and create meaningful impact.",
     delay: "0.2s",
+    quoteSanskrit: "यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः।",
+    quoteHindi: "श्रेष्ठ व्यक्ति जैसा आचरण करता है, बाकी लोग वैसा ही अनुसरण करते हैं।",
+    quoteEnglish: "Whatever a great person does, others follow.",
     icon: (
       <svg viewBox="0 0 24 24">
         <circle cx="7" cy="7" r="2.6" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -90,6 +107,9 @@ const TOPICS = [
     title: "Purpose & Fulfillment",
     desc: "Live a life aligned with what matters most to you.",
     delay: "0.25s",
+    quoteSanskrit: "सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।",
+    quoteHindi: "सभी सुखी हों, सभी निरोगी हों — यही जीवन का सच्चा उद्देश्य है।",
+    quoteEnglish: "May all be happy, may all be free from illness.",
     icon: (
       <svg viewBox="0 0 24 24">
         <path
@@ -105,6 +125,15 @@ const TOPICS = [
 ];
 
 export default function Topics() {
+  const [openTopic, setOpenTopic] = useState(null);
+  const [flippingTitle, setFlippingTitle] = useState(null);
+
+  function handleSelect(topic) {
+    setFlippingTitle(topic.title);
+    setOpenTopic(topic);
+    window.setTimeout(() => setFlippingTitle(null), 600);
+  }
+
   return (
     <section className="topics" id="topics">
       <div className="container">
@@ -123,14 +152,28 @@ export default function Topics() {
 
         <div className="topics-grid">
           {TOPICS.map((topic) => (
-            <Reveal className="topic-card" delay={topic.delay} key={topic.title}>
-              <span className="topic-icon">{topic.icon}</span>
-              <h3>{topic.title}</h3>
-              <p>{topic.desc}</p>
+            <Reveal
+              as="button"
+              type="button"
+              className={`topic-card${
+                flippingTitle === topic.title ? " is-flipping" : ""
+              }`}
+              delay={topic.delay}
+              key={topic.title}
+              onClick={() => handleSelect(topic)}
+            >
+              <span className="topic-card-face">
+                <span className="topic-icon">{topic.icon}</span>
+                <h3>{topic.title}</h3>
+                <p>{topic.desc}</p>
+                <span className="topic-card-hint">Tap for a quote</span>
+              </span>
             </Reveal>
           ))}
         </div>
       </div>
+
+      <TopicModal topic={openTopic} onClose={() => setOpenTopic(null)} />
     </section>
   );
 }

@@ -29,8 +29,8 @@ const STATS = [
   },
   {
     label: "People Inspired",
-    count: 200,
-    suffix: "K+",
+    count: 1,
+    suffix: "M+",
     icon: (
       <svg viewBox="0 0 24 24">
         <path

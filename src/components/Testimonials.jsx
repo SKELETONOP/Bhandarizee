@@ -1,32 +1,62 @@
+import { useRef, useState } from "react";
 import Reveal from "./Reveal";
+import { TESTIMONIALS } from "../data/testimonials";
+import { videoThumb } from "../data/videos";
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "His energy, stories and insights completely transformed the way our team thinks and approaches challenges.",
-    name: "Sarah Mitchell",
-    role: "HR Director, TechCorp",
-    avatar: "/images/testimonial-1.svg",
-  },
-  {
-    quote:
-      "One of the most impactful speakers I've ever seen. The audience was engaged from start to finish.",
-    name: "David Thompson",
-    role: "Event Organizer",
-    avatar: "/images/testimonial-2.svg",
-    delay: "0.1s",
-  },
-  {
-    quote:
-      "Practical, powerful and inspiring. He delivers messages that create real, lasting change.",
-    name: "Emily Roberts",
-    role: "Marketing Manager",
-    avatar: "/images/testimonial-3.svg",
-    delay: "0.2s",
-  },
-];
+function TestimonialCard({ item, isPlaying, onPlay }) {
+  return (
+    <div className="testimonial-video-card">
+      {isPlaying ? (
+        <div className="testimonial-video-frame">
+          <iframe
+            src={`https://www.youtube.com/embed/${encodeURIComponent(
+              item.videoId
+            )}?autoplay=1&rel=0`}
+            title={`${item.name} testimonial`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      ) : (
+        <button
+          type="button"
+          className="testimonial-play-trigger"
+          onClick={onPlay}
+          aria-label={`Play testimonial from ${item.name}`}
+        >
+          <img
+            src={videoThumb(item.videoId)}
+            alt={`${item.name} testimonial thumbnail`}
+            loading="lazy"
+          />
+          <span className="testimonial-play-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path d="M8 5v14l11-7z" fill="currentColor" />
+            </svg>
+          </span>
+        </button>
+      )}
+
+      <span className="testimonial-video-info">
+        <strong>{item.name}</strong>
+        <span>{item.role}</span>
+      </span>
+    </div>
+  );
+}
 
 export default function Testimonials() {
+  const trackRef = useRef(null);
+  const [playingIndex, setPlayingIndex] = useState(null);
+
+  function scrollByCards(direction) {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector(".testimonial-video-card");
+    const amount = card ? card.offsetWidth + 18 : 220;
+    track.scrollBy({ left: amount * direction, behavior: "smooth" });
+  }
+
   return (
     <section className="testimonials" id="testimonials">
       <div className="container">
@@ -39,20 +69,58 @@ export default function Testimonials() {
               What <span className="accent">People</span> Say
             </h2>
 
-            <div className="testimonial-grid">
-              {TESTIMONIALS.map((t) => (
-                <Reveal className="testimonial-card" delay={t.delay} key={t.name}>
-                  <span className="quote-icon">&ldquo;</span>
-                  <p>{t.quote}</p>
-                  <div className="testimonial-author">
-                    <img src={t.avatar} alt={t.name} />
-                    <div>
-                      <strong>{t.name}</strong>
-                      <span>{t.role}</span>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
+            <div className="testimonial-scroller">
+              <button
+                type="button"
+                className="testimonial-nav testimonial-nav-prev"
+                aria-label="Scroll testimonials left"
+                onClick={() => scrollByCards(-1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path
+                    d="M15 5l-7 7 7 7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+
+              <div className="testimonial-track" ref={trackRef}>
+                {TESTIMONIALS.map((item, i) => (
+                  <Reveal
+                    className="testimonial-video-wrap"
+                    delay={i ? `${Math.min(i * 0.05, 0.25)}s` : undefined}
+                    key={item.name}
+                  >
+                    <TestimonialCard
+                      item={item}
+                      isPlaying={playingIndex === i}
+                      onPlay={() => setPlayingIndex(i)}
+                    />
+                  </Reveal>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="testimonial-nav testimonial-nav-next"
+                aria-label="Scroll testimonials right"
+                onClick={() => scrollByCards(1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path
+                    d="M9 5l7 7-7 7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
 

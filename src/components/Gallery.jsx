@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Reveal from "./Reveal";
 
 const GALLERY = [
@@ -63,6 +64,12 @@ export default function Gallery({ onOpen }) {
             </Reveal>
           ))}
         </div>
+
+        <Reveal className="gallery-cta">
+          <Link to="/gallery" className="btn btn-primary">
+            View All Photos
+          </Link>
+        </Reveal>
       </div>
     </section>
   );

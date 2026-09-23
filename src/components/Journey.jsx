@@ -2,32 +2,32 @@ import Reveal from "./Reveal";
 
 const TIMELINE = [
   {
-    year: "2012",
+    year: "2015",
     title: "First Stage",
-    desc: "Began speaking at local colleges and community events.",
+    desc: "Took the very first stage, turning a personal journey into a mission to inspire others.",
   },
   {
-    year: "2016",
+    year: "2017",
     title: "Corporate Breakthrough",
-    desc: "Started delivering keynotes for corporate teams and leadership summits.",
+    desc: "Began delivering keynotes for corporate teams, leadership summits and large conventions.",
     delay: "0.1s",
   },
   {
     year: "2019",
-    title: "Published Author",
-    desc: "Released a book on resilience and mindset, reaching readers nationwide.",
+    title: "300,000+ Lives Touched",
+    desc: "Crossed a major milestone, reaching lakhs of people across live sessions nationwide.",
     delay: "0.2s",
   },
   {
     year: "2022",
-    title: "200,000+ Lives Touched",
-    desc: "Crossed a major milestone in people reached across live and virtual sessions.",
+    title: "800,000+ Lives Touched",
+    desc: "Nearly tripled that reach, becoming a trusted voice for personal and professional growth.",
     delay: "0.3s",
   },
   {
     year: "2026",
-    title: "Going Global",
-    desc: "Now booking international keynotes, workshops and executive coaching.",
+    title: "Explored 30+ Countries",
+    desc: "Now carrying the message of resilience and success across stages in 30+ countries.",
     delay: "0.4s",
   },
 ];
