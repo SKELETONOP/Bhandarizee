@@ -146,11 +146,13 @@ export default function Testimonials() {
                 />
               </svg>
             </span>
-            <h3>Book Me for Your Next Event</h3>
-            <p>
-              Looking for a speaker who can inspire and create a lasting
-              impact? Let's talk.
-            </p>
+            <div className="booking-card-text">
+              <h3>Book Me for Your Next Event</h3>
+              <p>
+                Looking for a speaker who can inspire and create a lasting
+                impact? Let's talk.
+              </p>
+            </div>
             <a href="#contact" className="btn btn-primary">
               Book Now
             </a>

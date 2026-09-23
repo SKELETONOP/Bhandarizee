@@ -702,7 +702,9 @@ section {
   color: var(--gold-dark);
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity var(--transition), transform var(--transition);
+  transition:
+    opacity var(--transition),
+    transform var(--transition);
 }
 .topic-card:hover .topic-card-hint,
 .topic-card:focus-visible .topic-card-hint {
@@ -979,7 +981,11 @@ section {
   width: 420px;
   height: 420px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(224, 166, 56, 0.22), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(224, 166, 56, 0.22),
+    transparent 70%
+  );
   filter: blur(70px);
   pointer-events: none;
   z-index: 0;
@@ -1075,7 +1081,11 @@ section {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0) 48%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0) 48%
+  );
   pointer-events: none;
 }
 .reel-badge {
@@ -1108,7 +1118,9 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 .reel-mute-btn:hover {
   background: var(--gold);
@@ -1192,7 +1204,9 @@ section {
   align-items: center;
   justify-content: center;
   z-index: 3;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 .reels-nav:hover {
   background: var(--gold);
@@ -1221,7 +1235,9 @@ section {
   border: 0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.22);
-  transition: width var(--transition), background var(--transition);
+  transition:
+    width var(--transition),
+    background var(--transition);
 }
 .reels-dot.active {
   width: 24px;
@@ -1388,10 +1404,9 @@ section {
   padding: 110px 0;
 }
 .testimonials-layout {
-  display: grid;
-  grid-template-columns: 1fr 0.55fr;
-  gap: 50px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
 }
 .testimonial-scroller {
   position: relative;
@@ -1399,6 +1414,7 @@ section {
 }
 .testimonial-track {
   display: flex;
+  justify-content: safe center;
   gap: 18px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -1450,7 +1466,11 @@ section {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1) 55%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.1) 55%
+  );
 }
 .testimonial-play-icon {
   position: absolute;
@@ -1522,17 +1542,25 @@ section {
   align-items: center;
   justify-content: center;
   z-index: 3;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 .testimonial-nav:hover {
   background: var(--gold);
   color: var(--black);
 }
 .testimonial-nav-prev {
-  left: -8px;
+  left: 0;
 }
 .testimonial-nav-next {
-  right: -8px;
+  right: 0;
+}
+
+@media (min-width: 641px) {
+  .testimonial-scroller {
+    padding: 0 54px;
+  }
 }
 
 .booking-card {
@@ -1540,7 +1568,6 @@ section {
   border-radius: var(--radius);
   padding: 40px 32px;
   color: var(--black);
-  margin-top: 84px;
 }
 .booking-icon {
   width: 52px;
@@ -1551,6 +1578,7 @@ section {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 .booking-card h3 {
   font-family: var(--ff-heading);
@@ -1571,6 +1599,30 @@ section {
   background: var(--black-soft);
 }
 
+@media (min-width: 641px) {
+  .booking-card {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 34px 40px;
+  }
+  .booking-icon {
+    margin-bottom: 0;
+  }
+  .booking-card-text {
+    flex: 1;
+  }
+  .booking-card h3 {
+    margin-bottom: 4px;
+  }
+  .booking-card p {
+    margin-bottom: 0;
+  }
+  .booking-card .btn-primary {
+    flex-shrink: 0;
+  }
+}
+
 /* ===================== FAQ ===================== */
 
 .faq {
@@ -1584,7 +1636,7 @@ section {
   align-items: start;
 }
 .faq-head {
-  position: sticky;
+  position: static;
   top: 120px;
 }
 .faq-item {
@@ -1992,12 +2044,6 @@ section {
   .about-photo {
     max-width: 380px;
   }
-  .testimonials-layout {
-    grid-template-columns: 1fr;
-  }
-  .booking-card {
-    margin-top: 40px;
-  }
   .contact-layout {
     grid-template-columns: 1fr;
   }
@@ -2087,7 +2133,8 @@ section {
   }
   .timeline-dot {
     transform: scale(0);
-    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay, 0s);
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
+      var(--delay, 0s);
   }
   .timeline-item.in-view .timeline-dot {
     transform: scale(1);
