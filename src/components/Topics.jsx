@@ -5,6 +5,7 @@ import TopicModal from "./TopicModal";
 const TOPICS = [
   {
     title: "Overcoming Adversity",
+    photo: "/images/topics/overcoming-adversity-bs-bhandari-keynote.webp",
     desc: "Turning setbacks into stepping stones for growth.",
     quoteSanskrit: "उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः।",
     quoteHindi: "उद्यम करने से ही कार्य सिद्ध होते हैं, केवल इच्छा करने से नहीं।",
@@ -23,6 +24,7 @@ const TOPICS = [
   },
   {
     title: "Unlocking Your Potential",
+    photo: "/images/topics/unlocking-your-potential-bs-bhandari-leadership-training.webp",
     desc: "Discover your strengths and learn to maximize them.",
     delay: "0.05s",
     quoteSanskrit: "उत्तिष्ठत जाग्रत प्राप्य वरान्निबोधत।",
@@ -49,6 +51,7 @@ const TOPICS = [
   },
   {
     title: "Mindset & Motivation",
+    photo: "/images/topics/mindset-and-motivation-bs-bhandari-portrait.webp",
     desc: "Build a resilient mindset that drives lasting success.",
     delay: "0.1s",
     quoteSanskrit: "मन एव मनुष्याणां कारणं बन्धमोक्षयोः।",
@@ -69,6 +72,7 @@ const TOPICS = [
   },
   {
     title: "Goal Setting & Achievement",
+    photo: "/images/topics/goal-setting-and-achievement-bs-bhandari-success.webp",
     desc: "Set goals that truly inspire and follow through on them.",
     delay: "0.15s",
     quoteSanskrit: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।",
@@ -84,6 +88,7 @@ const TOPICS = [
   },
   {
     title: "Leadership & Influence",
+    photo: "/images/topics/leadership-and-influence-bs-bhandari-portrait.webp",
     desc: "Lead with purpose and create meaningful impact.",
     delay: "0.2s",
     quoteSanskrit: "यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः।",
@@ -105,6 +110,7 @@ const TOPICS = [
   },
   {
     title: "Purpose & Fulfillment",
+    photo: "/images/topics/purpose-and-fulfillment-bs-bhandari-namaste.webp",
     desc: "Live a life aligned with what matters most to you.",
     delay: "0.25s",
     quoteSanskrit: "सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।",

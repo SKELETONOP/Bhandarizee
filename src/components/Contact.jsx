@@ -13,7 +13,7 @@ const EMAILJS_CONFIG = {
 
 function isEmailjsConfigured() {
   return Object.keys(EMAILJS_CONFIG).every(
-    (key) => EMAILJS_CONFIG[key] && EMAILJS_CONFIG[key].indexOf("YOUR_") !== 0
+    (key) => EMAILJS_CONFIG[key] && EMAILJS_CONFIG[key].indexOf("YOUR_") !== 0,
   );
 }
 
@@ -41,7 +41,7 @@ export default function Contact() {
       console.warn(
         "[Bhandarizee] Email sending isn't configured yet — the contact " +
           "form will show an error on submit until EMAILJS_CONFIG in " +
-          'src/components/Contact.jsx is filled in. See README.md → "Setting up email sending".'
+          'src/components/Contact.jsx is filled in. See README.md → "Setting up email sending".',
       );
     }
   }, []);
@@ -54,7 +54,8 @@ export default function Contact() {
     REQUIRED_FIELDS.forEach((name) => {
       const field = form.elements[name];
       let fieldValid = field.value.trim().length > 0;
-      if (name === "email" && fieldValid) fieldValid = isValidEmail(field.value.trim());
+      if (name === "email" && fieldValid)
+        fieldValid = isValidEmail(field.value.trim());
       if (!fieldValid) {
         nextInvalid[name] = true;
         valid = false;
@@ -89,17 +90,27 @@ export default function Contact() {
 
     const templateParams = {
       inquiry_type:
-        inquiryType === "enquiry" ? "Corporate or Training Enquiry" : "Support or Feedback",
+        inquiryType === "enquiry"
+          ? "Corporate or Training Enquiry"
+          : "Support or Feedback",
       from_name: form.elements.name.value.trim(),
       from_email: form.elements.email.value.trim(),
       phone: form.elements.phone.value.trim() || "Not provided",
       message: form.elements.message.value.trim(),
       company:
-        inquiryType === "enquiry" ? form.elements.company.value.trim() || "Not provided" : "",
+        inquiryType === "enquiry"
+          ? form.elements.company.value.trim() || "Not provided"
+          : "",
       event_date:
-        inquiryType === "enquiry" ? form.elements.eventDate.value || "Not specified" : "",
-      event_type: inquiryType === "enquiry" ? form.elements.eventType.value : "",
-      time: new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }),
+        inquiryType === "enquiry"
+          ? form.elements.eventDate.value || "Not specified"
+          : "",
+      event_type:
+        inquiryType === "enquiry" ? form.elements.eventType.value : "",
+      time: new Date().toLocaleString("en-US", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }),
     };
     const templateId =
       inquiryType === "enquiry"
@@ -108,19 +119,17 @@ export default function Contact() {
 
     setStatus("sending");
 
-    emailjs
-      .send(EMAILJS_CONFIG.serviceId, templateId, templateParams)
-      .then(
-        () => {
-          setStatus("submitted");
-          form.reset();
-          setInquiryType("enquiry");
-        },
-        (err) => {
-          console.error("[Bhandarizee] EmailJS send failed:", err);
-          setStatus("error");
-        }
-      );
+    emailjs.send(EMAILJS_CONFIG.serviceId, templateId, templateParams).then(
+      () => {
+        setStatus("submitted");
+        form.reset();
+        setInquiryType("enquiry");
+      },
+      (err) => {
+        console.error("[Bhandarizee] EmailJS send failed:", err);
+        setStatus("error");
+      },
+    );
   }
 
   const submitLabel = status === "sending" ? "Sending..." : "Send Message";
@@ -137,8 +146,7 @@ export default function Contact() {
             Let's Create Something <span className="accent">Extraordinary</span>
           </h2>
           <p className="section-sub light">
-            Tell us about your event and we'll get back to you within 24
-            hours.
+            Tell us about your event and we'll get back to you within 24 hours.
           </p>
         </Reveal>
 
@@ -158,7 +166,9 @@ export default function Contact() {
               </span>
               <div>
                 <strong>Email</strong>
-                <a href="mailto:hello@bhandarizee.com">hello@bhandarizee.com</a>
+                <a href="mailto:bsbhandari@bhandarizee.com">
+                  bsbhandari@bhandarizee.com
+                </a>
               </div>
             </div>
             <div className="contact-info-item">
@@ -175,7 +185,7 @@ export default function Contact() {
               </span>
               <div>
                 <strong>Phone</strong>
-                <a href="tel:+910000000000">+91 00000 00000</a>
+                <a href="tel:+918290962186">+91 82909 62186</a>
               </div>
             </div>
             <div className="contact-info-item">
@@ -188,7 +198,14 @@ export default function Contact() {
                     strokeWidth="1.5"
                     strokeLinejoin="round"
                   />
-                  <circle cx="12" cy="9.5" r="2.3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <circle
+                    cx="12"
+                    cy="9.5"
+                    r="2.3"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
                 </svg>
               </span>
               <div>
@@ -198,7 +215,7 @@ export default function Contact() {
             </div>
 
             <div className="contact-social">
-              <a href="#" aria-label="Facebook" target="_blank" rel="noopener">
+              <a href="https://www.facebook.com/bhandarizeeAWPL" aria-label="Facebook" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" width="18" height="18">
                   <path
                     d="M14 9h3V6h-3c-2 0-3.5 1.6-3.5 3.5V11H8v3h2.5v7h3v-7H16l.5-3h-3V9.6c0-.4.3-.6.5-.6Z"
@@ -206,7 +223,12 @@ export default function Contact() {
                   />
                 </svg>
               </a>
-              <a href="#" aria-label="Twitter / X" target="_blank" rel="noopener">
+              <a
+                href="https://x.com/bsbhandariawpl"
+                aria-label="Twitter / X"
+                target="_blank"
+                rel="noopener"
+              >
                 <svg viewBox="0 0 24 24" width="18" height="18">
                   <path
                     d="m3 3 7.3 9.6L3.4 21H6l5.8-6.7L16.4 21H21l-7.7-10.1L20.3 3H17.7l-5.3 6.1L8.1 3H3Zm3.4 1.6h2l9.2 12.8h-2L6.4 4.6Z"
@@ -214,18 +236,26 @@ export default function Contact() {
                   />
                 </svg>
               </a>
-              <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/bsbhandariawpl/" aria-label="Instagram" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path
-                    d="M4.5 3.7a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM3 9h3v12H3V9Zm6 0h2.9v1.6h.04c.4-.8 1.5-1.6 3-1.6 3.2 0 3.8 2 3.8 4.6V21h-3v-6.1c0-1.5 0-3.4-2.1-3.4s-2.4 1.6-2.4 3.3V21H9V9Z"
-                    fill="currentColor"
+                  <rect
+                    x="3"
+                    y="3"
+                    width="18"
+                    height="18"
+                    rx="5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
                   />
-                </svg>
-              </a>
-              <a href="#" aria-label="Instagram" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="18" height="18">
-                  <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                  <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.6" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
                   <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
                 </svg>
               </a>
@@ -236,7 +266,16 @@ export default function Contact() {
                 rel="noopener"
               >
                 <svg viewBox="0 0 24 24" width="18" height="18">
-                  <rect x="2.5" y="6" width="19" height="12" rx="4" fill="none" stroke="currentColor" strokeWidth="1.6" />
+                  <rect
+                    x="2.5"
+                    y="6"
+                    width="19"
+                    height="12"
+                    rx="4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
                   <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" />
                 </svg>
               </a>
@@ -284,10 +323,18 @@ export default function Contact() {
               </button>
               <span className="inquiry-slider" aria-hidden="true"></span>
             </div>
-            <input type="hidden" name="inquiryType" id="inquiryType" value={inquiryType} readOnly />
+            <input
+              type="hidden"
+              name="inquiryType"
+              id="inquiryType"
+              value={inquiryType}
+              readOnly
+            />
 
             <div className="form-row">
-              <div className={`form-group${invalidFields.name ? " invalid" : ""}`}>
+              <div
+                className={`form-group${invalidFields.name ? " invalid" : ""}`}
+              >
                 <label htmlFor="name">Full Name</label>
                 <input
                   type="text"
@@ -299,7 +346,9 @@ export default function Contact() {
                 />
                 <span className="form-error">Please enter your name.</span>
               </div>
-              <div className={`form-group${invalidFields.email ? " invalid" : ""}`}>
+              <div
+                className={`form-group${invalidFields.email ? " invalid" : ""}`}
+              >
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -314,7 +363,12 @@ export default function Contact() {
             </div>
             <div className="form-group">
               <label htmlFor="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000" />
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+91 82909 62186"
+              />
             </div>
 
             <div className="corporate-only">
@@ -335,7 +389,11 @@ export default function Contact() {
               </div>
               <div className="form-group">
                 <label htmlFor="eventType">Event Type</label>
-                <select id="eventType" name="eventType" defaultValue="corporate">
+                <select
+                  id="eventType"
+                  name="eventType"
+                  defaultValue="corporate"
+                >
                   <option value="corporate">Corporate Event</option>
                   <option value="college">College / School</option>
                   <option value="conference">Conference / Seminar</option>
@@ -345,8 +403,12 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className={`form-group${invalidFields.message ? " invalid" : ""}`}>
-              <label htmlFor="message" id="messageLabel">Message</label>
+            <div
+              className={`form-group${invalidFields.message ? " invalid" : ""}`}
+            >
+              <label htmlFor="message" id="messageLabel">
+                Message
+              </label>
               <textarea
                 id="message"
                 name="message"
@@ -357,7 +419,11 @@ export default function Contact() {
               ></textarea>
               <span className="form-error">Please add a short message.</span>
             </div>
-            <button type="submit" className="btn btn-primary form-submit" disabled={status === "sending"}>
+            <button
+              type="submit"
+              className="btn btn-primary form-submit"
+              disabled={status === "sending"}
+            >
               <span className="btn-label">{submitLabel}</span>
             </button>
             <p className="form-success" id="formSuccess" role="status">
@@ -367,7 +433,10 @@ export default function Contact() {
             <p className="form-error-banner" id="formErrorBanner" role="alert">
               Something went wrong sending your message. Please try again, or
               email us directly at{" "}
-              <a href="mailto:hello@bhandarizee.com">hello@bhandarizee.com</a>.
+              <a href="mailto:bsbhandari@bhandarizee.com">
+                bsbhandari@bhandarizee.com
+              </a>
+              .
             </p>
           </Reveal>
         </div>

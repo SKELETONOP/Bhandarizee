@@ -262,6 +262,27 @@ section {
   display: flex;
   gap: 34px;
 }
+
+/* Light-background pages (e.g. /gallery): dark logo and nav while the
+   header is transparent. The scrolled header keeps the light logo. */
+.site-header.on-light .logo-main {
+  color: var(--text-dark);
+}
+.site-header.on-light .logo-sub {
+  color: var(--text-muted);
+}
+.site-header.on-light .nav-toggle span {
+  background: var(--text-dark);
+}
+@media (min-width: 901px) {
+  .site-header.on-light .nav-link {
+    color: var(--text-muted);
+  }
+  .site-header.on-light .nav-link:hover,
+  .site-header.on-light .nav-link.active {
+    color: var(--text-dark);
+  }
+}
 .nav-link {
   font-family: var(--ff-heading);
   font-size: 0.82rem;
@@ -1977,6 +1998,11 @@ section {
   margin-top: 10px;
   padding: 12px 24px;
   font-size: 0.75rem;
+  color: var(--black);
+}
+.footer-contact .btn:hover {
+  color: var(--black);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
 }
 
 .footer-bottom {
@@ -2212,8 +2238,84 @@ section {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
+  /* Mobile timeline (scroll-driven, reversible): the base line draws in as
+     the section arrives; each point's dot pops, its text slides in, and the
+     gold line draws down toward the next point. Scrolling back up plays it
+     in reverse. */
   .timeline {
     grid-template-columns: 1fr;
+    gap: 0;
+    padding-left: 34px;
+  }
+  .timeline::before {
+    display: block;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .timeline.is-active::before {
+    transform: scaleY(1);
+  }
+  .timeline-item,
+  .timeline-item.reveal-up,
+  .timeline-item:nth-child(even).reveal-up {
+    opacity: 1;
+    transform: none;
+    padding: 0 0 30px;
+    margin: 0;
+  }
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -26px;
+    width: 2px;
+    height: 100%;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+  .timeline-item:last-child::before {
+    display: none;
+  }
+  .timeline-item.in-view::before {
+    transform: scaleY(1);
+    transition: transform 0.9s ease 0.3s;
+  }
+  .timeline-dot {
+    top: 2px;
+    left: -34px;
+    transition-delay: 0s;
+  }
+  .timeline-item > :not(.timeline-dot) {
+    opacity: 0;
+    transform: translateX(28px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s ease;
+  }
+  .timeline-item.in-view > :not(.timeline-dot) {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .timeline-item.in-view > .timeline-year {
+    transition-delay: 0.12s;
+  }
+  .timeline-item.in-view > h3 {
+    transition-delay: 0.22s;
+  }
+  .timeline-item.in-view > p {
+    transition-delay: 0.32s;
   }
   .form-row {
     grid-template-columns: 1fr;

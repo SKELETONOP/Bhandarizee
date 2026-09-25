@@ -8,7 +8,14 @@ const STATS = [
     suffix: "+",
     icon: (
       <svg viewBox="0 0 24 24">
-        <circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle
+          cx="9"
+          cy="8"
+          r="3"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
         <path
           d="M2.5 19c.6-3.6 3.1-6 6.5-6s5.9 2.4 6.5 6"
           fill="none"
@@ -16,7 +23,14 @@ const STATS = [
           strokeWidth="1.5"
           strokeLinecap="round"
         />
-        <circle cx="17" cy="8" r="2.4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle
+          cx="17"
+          cy="8"
+          r="2.4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
         <path
           d="M15.8 13.3c2.7.4 4.6 2.5 5.1 5.7"
           fill="none"
@@ -52,11 +66,18 @@ const STATS = [
   },
   {
     label: "Cities Covered",
-    count: 30,
+    count: 10,
     suffix: "+",
     icon: (
       <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle
+          cx="12"
+          cy="12"
+          r="9"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
         <path
           d="M3 12h18M12 3c2.5 2.6 4 5.7 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.7-4-9s1.5-6.4 4-9Z"
           fill="none"
@@ -93,7 +114,9 @@ function StatNumber({ target }) {
     const el = ref.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -119,7 +142,7 @@ function StatNumber({ target }) {
           }
         });
       },
-      { threshold: 0.6 }
+      { threshold: 0.6 },
     );
     observer.observe(el);
     return () => observer.disconnect();

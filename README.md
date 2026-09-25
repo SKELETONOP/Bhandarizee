@@ -70,13 +70,13 @@ working — just overwrite the file (jpg/png/webp all work fine; if you use a
 different extension, update the matching `src=` in the component that uses
 it).
 
-| File | Used for | Recommended size | Referenced in |
-|---|---|---|---|
-| `hero-bg.png` | Full-bleed hero background (Bhandari on stage) | 1600×1000+ | `src/index.css` (`.hero-bg`) |
-| `about-photo.png` | About section portrait | 800×900 | `src/components/About.jsx` |
-| `gallery-1.png` … `gallery-6.svg` | Gallery grid (event photos) | 800×800 (square) | `src/components/Gallery.jsx`, `src/components/Videos.jsx` |
-| `testimonial-1.svg` … `testimonial-3.svg` | Client avatars in testimonials | 200×200 | `src/components/Testimonials.jsx` |
-| `favicon.svg` | Browser tab icon | any, square | `index.html` |
+| File                                      | Used for                                       | Recommended size | Referenced in                                             |
+| ----------------------------------------- | ---------------------------------------------- | ---------------- | --------------------------------------------------------- |
+| `hero-bg.png`                             | Full-bleed hero background (Bhandari on stage) | 1600×1000+       | `src/index.css` (`.hero-bg`)                              |
+| `about-photo.png`                         | About section portrait                         | 800×900          | `src/components/About.jsx`                                |
+| `gallery-1.png` … `gallery-6.svg`         | Gallery grid (event photos)                    | 800×800 (square) | `src/components/Gallery.jsx`, `src/components/Videos.jsx` |
+| `testimonial-1.svg` … `testimonial-3.svg` | Client avatars in testimonials                 | 200×200          | `src/components/Testimonials.jsx`                         |
+| `favicon.svg`                             | Browser tab icon                               | any, square      | `index.html`                                              |
 
 ### A different hero photo for mobile
 
@@ -169,7 +169,7 @@ here's the shape:
 - Subject line used on both: `New message from {{from_name}} — {{inquiry_type}}`
 - In the template's settings panel (right side): **From Name** → `{{from_name}}`, **Reply To**
   → `{{from_email}}` (so replying goes to the visitor), **From Email** → leave "Use Default
-  Email Address" checked (sending *as* the visitor's address gets flagged as spam by most
+  Email Address" checked (sending _as_ the visitor's address gets flagged as spam by most
   providers).
 - `{{inquiry_type}}`'s value intentionally avoids a `/` character (it's sent as "Corporate or
   Training Enquiry" / "Support or Feedback") — EmailJS HTML-escapes template variables even in
@@ -190,8 +190,9 @@ Formspree forms.
 ## Editable details
 
 Search the codebase for these and update with the real details:
-- Email: `hello@bhandarizee.com` (in `Contact.jsx` and `Footer.jsx`)
-- Phone: `+91 00000 00000` (in `Contact.jsx` and `Footer.jsx`)
+
+- Email: `bsbhandari@bhandarizee.com` (in `Contact.jsx` and `Footer.jsx`)
+- Phone: `+91 829096 2186` (in `Contact.jsx` and `Footer.jsx`)
 - Social links (currently `href="#"` placeholders) in `Contact.jsx` and `Footer.jsx`
 
 ## Deploying (Netlify)

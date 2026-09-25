@@ -1,9 +1,21 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 
 /* Wraps content that should fade/slide in on scroll, matching the
-   original .reveal-up / .in-view CSS classes and --delay custom property. */
+   original .reveal-up / .in-view CSS classes and --delay custom property.
+   With `repeat`, the element also reverses when scrolled back up: it stays
+   in view once it has passed above the viewport, and drops out again when
+   it falls back below the trigger line. `rootMargin` moves that line. */
 const Reveal = forwardRef(function Reveal(
-  { as: Tag = "div", delay, className = "", style, children, ...rest },
+  {
+    as: Tag = "div",
+    delay,
+    repeat = false,
+    rootMargin,
+    className = "",
+    style,
+    children,
+    ...rest
+  },
   forwardedRef
 ) {
   const innerRef = useRef(null);
@@ -23,15 +35,17 @@ const Reveal = forwardRef(function Reveal(
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setInView(true);
-            observer.unobserve(entry.target);
+            if (!repeat) observer.unobserve(entry.target);
+          } else if (repeat) {
+            setInView(entry.boundingClientRect.top < 0);
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.15, rootMargin }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [repeat, rootMargin]);
 
   function setRefs(node) {
     innerRef.current = node;

@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 
-const SPEAKER_PHOTO = "/images/about-photo.png";
-
 export default function TopicModal({ topic, onClose }) {
   const open = Boolean(topic);
 
@@ -39,8 +37,8 @@ export default function TopicModal({ topic, onClose }) {
           </button>
           <img
             className="topic-modal-photo"
-            src={SPEAKER_PHOTO}
-            alt="BS Bhandari"
+            src={topic.photo}
+            alt={`B. S. Bhandari — ${topic.title}`}
           />
           <div className="topic-modal-body">
             <p className="topic-modal-title">{topic.title}</p>

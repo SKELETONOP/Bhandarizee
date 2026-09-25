@@ -16,6 +16,9 @@ const NAV_SECTIONS = [
 export default function Header() {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  // Pages with a light background need the dark logo/nav until the header
+  // picks up its dark scrolled background (or the dark mobile menu opens).
+  const isLightPage = location.pathname === "/gallery";
 
   const [scrolled, setScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
@@ -64,18 +67,27 @@ export default function Header() {
   const PAGE_LINKS = { videos: "/videos", gallery: "/gallery" };
 
   function sectionHref(id) {
+    if (id === "home") return "/";
     if (PAGE_LINKS[id]) return PAGE_LINKS[id];
     return isHome ? `#${id}` : `/#${id}`;
+  }
+
+  // "/" is already the current URL when on the home page, so the router
+  // won't re-run its scroll handling — scroll to the top ourselves.
+  function scrollHomeToTop() {
+    if (isHome && !location.hash) window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
     <>
       <header
-        className={`site-header${scrolled ? " scrolled" : ""}`}
+        className={`site-header${scrolled ? " scrolled" : ""}${
+          isLightPage && !scrolled && !navOpen ? " on-light" : ""
+        }`}
         id="siteHeader"
       >
         <div className="container header-inner">
-          <Link to={sectionHref("home")} className="logo">
+          <Link to={sectionHref("home")} className="logo" onClick={scrollHomeToTop}>
             <span className="logo-main">
               BHANDARI<span className="accent">ZEE</span>
             </span>
@@ -91,7 +103,10 @@ export default function Header() {
                     className={`nav-link${
                       isHome && activeId === s.id ? " active" : ""
                     }`}
-                    onClick={() => setNavOpen(false)}
+                    onClick={() => {
+                      setNavOpen(false);
+                      if (s.id === "home") scrollHomeToTop();
+                    }}
                   >
                     {s.label}
                   </Link>

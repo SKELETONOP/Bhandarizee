@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { loadYouTubeIframeApi } from "../lib/youtubeIframeApi";
 
-const SPEAKER_AVATAR = "/images/about-photo.png";
+const SPEAKER_AVATAR = "/images/bs-bhandari-avatar.webp";
 
 // Sourced from https://www.youtube.com/@bsbhandariofficial/shorts — update
 // by swapping the `id` (and thumb, which is keyed to the same id) as new

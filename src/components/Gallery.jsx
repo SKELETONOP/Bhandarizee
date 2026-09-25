@@ -7,27 +7,27 @@ const GALLERY = [
     alt: "Bhandari speaking at a corporate event",
   },
   {
-    src: "/images/gallery-2.svg",
+    src: "/images/gallery/bs-bhandari-secret-of-success-audience-engagement.webp",
     alt: "Bhandari engaging with the audience",
     delay: "0.05s",
   },
   {
-    src: "/images/gallery-3.svg",
-    alt: "Bhandari at a college seminar",
+    src: "/images/gallery/bs-bhandari-system-training-seminar.webp",
+    alt: "Bhandari leading a System Training seminar",
     delay: "0.1s",
   },
   {
-    src: "/images/gallery-4.svg",
+    src: "/images/gallery/bs-bhandari-keynote-auditorium-audience.webp",
     alt: "Bhandari on a large auditorium stage",
     delay: "0.15s",
   },
   {
-    src: "/images/gallery-5.svg",
+    src: "/images/gallery/bs-bhandari-secret-of-success-workshop-session.webp",
     alt: "Bhandari during a workshop session",
     delay: "0.2s",
   },
   {
-    src: "/images/gallery-6.svg",
+    src: "/images/gallery/bs-bhandari-meeting-leaders-after-talk.webp",
     alt: "Bhandari meeting attendees after a talk",
     delay: "0.25s",
   },

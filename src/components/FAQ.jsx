@@ -3,7 +3,7 @@ import Reveal from "./Reveal";
 
 const FAQS = [
   {
-    q: "How do I book Bhandari for my event?",
+    q: "How do I book BS Bhandari for my event?",
     a: "Simply fill out the contact form below with your event details, or reach out directly by phone or email. We typically respond within 24 hours.",
   },
   {
