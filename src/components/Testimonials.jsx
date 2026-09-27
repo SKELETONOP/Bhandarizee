@@ -2,10 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { TESTIMONIALS } from "../data/testimonials";
 
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+  const s = Math.floor(seconds);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+}
+
 // Muted looping player that only loads/plays while it's on screen, with
-// the same top-right mute toggle as the Shorts section.
+// the same top-right mute toggle as the Shorts section, plus play/pause
+// and a seekable timeline.
 function TestimonialCard({ item, muted, onToggleMute }) {
   const videoRef = useRef(null);
+  // Set when the viewer pauses by hand, so scrolling back into view
+  // doesn't auto-resume a video they stopped.
+  const userPausedRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -13,7 +26,7 @@ function TestimonialCard({ item, muted, onToggleMute }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          if (!userPausedRef.current) video.play().catch(() => {});
         } else {
           video.pause();
         }
@@ -28,6 +41,27 @@ function TestimonialCard({ item, muted, onToggleMute }) {
     if (videoRef.current) videoRef.current.muted = muted;
   }, [muted]);
 
+  function togglePlay() {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      userPausedRef.current = false;
+      video.play().catch(() => {});
+    } else {
+      userPausedRef.current = true;
+      video.pause();
+    }
+  }
+
+  function seek(e) {
+    const video = videoRef.current;
+    const time = Number(e.target.value);
+    setCurrentTime(time);
+    if (video) video.currentTime = time;
+  }
+
+  const progress = duration ? (currentTime / duration) * 100 : 0;
+
   return (
     <div className="testimonial-video-card">
       <div className="testimonial-video-frame">
@@ -40,6 +74,12 @@ function TestimonialCard({ item, muted, onToggleMute }) {
           playsInline
           preload="none"
           aria-label={`${item.name} — ${item.role} video testimonial`}
+          onClick={togglePlay}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+          onDurationChange={(e) => setDuration(e.currentTarget.duration)}
         />
       </div>
 
@@ -74,10 +114,45 @@ function TestimonialCard({ item, muted, onToggleMute }) {
         )}
       </button>
 
-      <span className="testimonial-video-info">
-        <strong>{item.name}</strong>
-        <span>{item.role}</span>
-      </span>
+      <div className="testimonial-video-bottom">
+        <div className="testimonial-controls">
+          <button
+            type="button"
+            className="testimonial-play-btn"
+            aria-label={playing ? "Pause video" : "Play video"}
+            onClick={togglePlay}
+          >
+            {playing ? (
+              <svg viewBox="0 0 24 24" width="14" height="14">
+                <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="14" height="14">
+                <path d="M8 5v14l11-7z" fill="currentColor" />
+              </svg>
+            )}
+          </button>
+          <input
+            type="range"
+            className="testimonial-seek"
+            min="0"
+            max={duration || 0}
+            step="0.1"
+            value={currentTime}
+            onChange={seek}
+            aria-label="Seek video"
+            style={{ "--progress": `${progress}%` }}
+          />
+          <span className="testimonial-time">
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </span>
+        </div>
+
+        <span className="testimonial-video-info">
+          <strong>{item.name}</strong>
+          <span>{item.role}</span>
+        </span>
+      </div>
     </div>
   );
 }
