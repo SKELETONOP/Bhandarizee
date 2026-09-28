@@ -43,7 +43,7 @@ const STATS = [
   },
   {
     label: "People Inspired",
-    count: 1,
+    count: 1.2,
     suffix: "M+",
     icon: (
       <svg viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ const STATS = [
   },
   {
     label: "Cities Covered",
-    count: 10,
+    count: 30,
     suffix: "+",
     icon: (
       <svg viewBox="0 0 24 24">
