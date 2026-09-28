@@ -7,6 +7,7 @@ const NAV_SECTIONS = [
   { id: "topics", label: "Topics" },
   { id: "videos", label: "Videos" },
   { id: "reels", label: "Reels" },
+  { id: "events", label: "Events" },
   { id: "gallery", label: "Gallery" },
   { id: "testimonials", label: "Testimonials" },
   { id: "faq", label: "FAQ" },
@@ -64,7 +65,7 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const PAGE_LINKS = { videos: "/videos", gallery: "/gallery" };
+  const PAGE_LINKS = { videos: "/videos", events: "/events", gallery: "/gallery" };
 
   function sectionHref(id) {
     if (id === "home") return "/";

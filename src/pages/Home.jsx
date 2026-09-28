@@ -6,6 +6,7 @@ import Topics from "../components/Topics";
 import Videos from "../components/Videos";
 import Reels from "../components/Reels";
 import VideoModal from "../components/VideoModal";
+import Events from "../components/Events";
 import Gallery from "../components/Gallery";
 import Lightbox from "../components/Lightbox";
 import Journey from "../components/Journey";
@@ -26,6 +27,7 @@ export default function Home() {
       <Videos onPlay={setPlayingVideoId} />
       <Reels />
       <VideoModal youtubeId={playingVideoId} onClose={() => setPlayingVideoId(null)} />
+      <Events />
       <Gallery onOpen={(src, alt) => setLightboxImage({ src, alt })} />
       <Lightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
       <Journey />

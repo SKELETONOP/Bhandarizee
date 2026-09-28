@@ -99,6 +99,7 @@ export default function Footer() {
           <Link to={sectionHref("videos")}>Videos</Link>
           <Link to="/videos">All Videos</Link>
           <Link to={sectionHref("reels")}>Reels</Link>
+          <Link to="/events">Events</Link>
           <Link to={sectionHref("gallery")}>Gallery</Link>
         </div>
 

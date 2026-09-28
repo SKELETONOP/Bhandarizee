@@ -6,6 +6,7 @@ import BackToTop from "./components/BackToTop";
 import Home from "./pages/Home";
 import AllVideos from "./pages/AllVideos";
 import GalleryPage from "./pages/GalleryPage";
+import EventsPage from "./pages/EventsPage";
 
 function ScrollManager() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/videos" element={<AllVideos />} />
         <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/events" element={<EventsPage />} />
       </Routes>
 
       <Footer />
