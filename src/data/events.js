@@ -36,6 +36,19 @@ export const EVENTS = [
   { date: "2026-10-23", city: "Jaipur", type: "Royal Diamond Celebration", featured: true },
   { date: "2026-10-25", city: "Indore", type: "Ajay Rath", featured: true },
   { date: "2026-11-01", city: "Agra", type: "Ajay Rath", featured: true },
+  { date: "2026-12-06", city: "Dehradun", type: "Ajay Rath", featured: true },
+  { date: "2026-12-13", city: "Kolkata", type: "Ajay Rath", featured: true },
+  { date: "2026-12-20", city: "Mumbai", type: "Ajay Rath", featured: true },
+  { date: "2026-12-27", city: "Bhubaneswar", type: "Ajay Rath", featured: true },
+  { date: "2027-01-03", city: "Bengaluru", type: "Ajay Rath", featured: true },
+  { date: "2027-01-10", city: "Raipur", type: "Ajay Rath", featured: true },
+  { date: "2027-01-21", city: "Guwahati", type: "Ajay Rath", featured: true },
+  { date: "2027-01-24", city: "Ahmedabad", type: "Ajay Rath", featured: true },
+  { date: "2027-02-07", city: "Ranchi", type: "Ajay Rath", featured: true },
+  { date: "2027-02-14", city: "Patna", type: "Ajay Rath", featured: true },
+  { date: "2027-02-21", city: "Jaipur", type: "Ajay Rath", featured: true },
+  { date: "2027-03-07", city: "Chandigarh", type: "Ajay Rath", featured: true },
+  { date: "2027-03-14", city: "Varanasi", type: "Ajay Rath", featured: true },
 ];
 
 function todayISO() {
